@@ -33,6 +33,13 @@
  },
  "missed_model_n": 4682,
  "missed_model_events": 1266,
+ "sex_effect_age_adjusted": {
+  "coef": -8.65,
+  "lo": -9.84,
+  "hi": -7.45,
+  "p": 0.0
+ },
+ "pooled_upper_limit_sp_mean": 102.0,
  "baseline_agreement_median_absdiff": 1.8617,
  "glasgow_vs_korspeak": {
   "n": 18557,

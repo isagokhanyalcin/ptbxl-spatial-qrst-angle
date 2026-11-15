@@ -92,6 +92,13 @@ s = pd.read_csv(f"{O}/table_sensitivity.csv")
 sup += ["", "**Supplementary Table S2.** Sensitivity analyses: discrimination of any abnormality from normal ECGs.", "",
         "| Analysis | n | AUC, spatial mean | AUC, frontal Uni-G | Spearman rho, spatial vs frontal |", "|---|---|---|---|---|"]
 sup += [f"| {r.analysis} | {int(r.n):,} | {r.auc_sp_mean:.3f} | {r.auc_fr_gl:.3f} | {r.spearman_sp_fr:.2f} |" for _, r in s.iterrows()]
+sx = pd.read_csv(f"{O}/table_sex_specific_vs_pooled.csv")
+sup += ["", "**Supplementary Table S3.** Spatially abnormal ECGs missed by the frontal angle with sex-specific and with pooled spatial upper limits.", "",
+        "| Spatial upper limit | Group | Spatially abnormal, n | Missed, frontal reference limit, % | Missed, frontal 90°, % |", "|---|---|---|---|---|"]
+lab3 = {"sex-specific": "Sex-specific (106° men, 97° women)", "pooled": "Pooled (102°)"}
+sup += [f"| {lab3[r.limit]} | {r.group.capitalize()} | {int(r.spatial_abn):,} | {r.missed_pct_ref:.1f} | {r.missed_pct_90:.1f} |" for _, r in sx[sx.limit != "reclassified"].iterrows()]
+rc3 = sx[sx.limit == "reclassified"].spatial_abn.astype(int).tolist()
+sup += ["", f"With the pooled limit, {rc3[0]} men were added to the abnormal group and {rc3[1]} women were removed from it."]
 sup.append("")
 open(OUT, "w", encoding="utf-8").write("\n".join(out)); open(SUP, "w", encoding="utf-8").write("\n".join(sup))
 print("\n".join(out)); print("\n".join(sup))

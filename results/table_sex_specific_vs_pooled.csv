@@ -1,0 +1,9 @@
+limit,group,spatial_abn,missed_pct_ref,missed_pct_90
+sex-specific,all,4838,26.539892517569243,37.32947498966515
+sex-specific,men,2566,26.03273577552611,35.697583787996884
+sex-specific,women,2272,27.11267605633803,39.17253521126761
+pooled,all,4825,26.50777202072539,37.03626943005182
+pooled,men,2749,28.919607129865405,38.81411422335395
+pooled,women,2076,23.314065510597302,34.68208092485549
+reclassified,"men, abnormal only with pooled",183,,
+reclassified,"women, abnormal only with sex-specific",196,,

@@ -176,6 +176,23 @@ lr = sm.Logit(mm.missed, sm.add_constant(mm[preds])).fit(disp=0)
 T_lr = pd.DataFrame({"OR": np.exp(lr.params), "lo": np.exp(lr.conf_int()[0]), "hi": np.exp(lr.conf_int()[1]), "p": lr.pvalues}).drop("const")
 T_lr.to_csv(f"{O}/table_missed_predictors.csv"); R["missed_model_n"] = len(mm); R["missed_model_events"] = int(mm.missed.sum())
 
+# sex-specific versus pooled spatial limit
+ra = ref[ref.age_ok].assign(fem=lambda d: d.female.astype(int))
+ols = sm.OLS(ra.sp_mean, sm.add_constant(ra[["fem", "age"]].astype(float))).fit()
+R["sex_effect_age_adjusted"] = {"coef": round(ols.params["fem"], 2), "lo": round(ols.conf_int().loc["fem", 0], 2),
+                                "hi": round(ols.conf_int().loc["fem", 1], 2), "p": float(ols.pvalues["fem"])}
+pooled = ref.sp_mean.quantile(.975); R["pooled_upper_limit_sp_mean"] = round(pooled, 1)
+x["sp_abn_pooled"] = x.sp_mean > pooled
+sx = []
+for rule, col in [("sex-specific", "sp_abn"), ("pooled", "sp_abn_pooled")]:
+    for grp, d in [("all", x), ("men", x[~x.female]), ("women", x[x.female])]:
+        a = d[d[col]]
+        sx.append({"limit": rule, "group": grp, "spatial_abn": len(a), "missed_pct_ref": 100 * (~a.fr_abn_ref).mean(),
+                   "missed_pct_90": 100 * (~a.fr_abn_90).mean()})
+sx.append({"limit": "reclassified", "group": "men, abnormal only with pooled", "spatial_abn": int((~x.female & x.sp_abn_pooled & ~x.sp_abn).sum())})
+sx.append({"limit": "reclassified", "group": "women, abnormal only with sex-specific", "spatial_abn": int((x.female & x.sp_abn & ~x.sp_abn_pooled).sum())})
+pd.DataFrame(sx).to_csv(f"{O}/table_sex_specific_vs_pooled.csv", index=False)
+
 
 # ---------------- diagnostic value ----------------
 def delong(y, s1, s2):
@@ -230,14 +247,16 @@ pd.DataFrame({"All": t1(x), "Healthy reference": t1(ref)}).to_csv(f"{O}/table_co
 
 # ---------------- figures ----------------
 plt.rcParams.update({"font.size": 9, "font.family": "DejaVu Sans"})
-fig, ax = plt.subplots(figsize=(5.6, 5))
-hb = ax.hexbin(x.fr_gl, x.sp_mean, gridsize=60, bins="log", cmap="Greys", mincnt=1, extent=(0, 180, 0, 180))
-ax.axvline(90, color="#cc3333", ls=":", lw=1); ax.text(91, 4, "frontal 90°", color="#cc3333", fontsize=8)
-ul = np.mean(list(lim["sp_mean"].values()))
-ax.axhline(ul, color="#1f5fbf", ls="--", lw=1); ax.text(178, ul + 2, f"spatial upper limit ≈{ul:.0f}°", color="#1f5fbf", fontsize=8, ha="right")
-ax.plot([0, 180], [0, 180], color="#bbbbbb", lw=0.8)
-ax.set_xlabel("Frontal QRS-T angle, Glasgow axes (°)"); ax.set_ylabel("Spatial QRS-T angle, Kors mean vectors (°)")
-ax.set_xlim(0, 180); ax.set_ylim(0, 180)
+fig, axs = plt.subplots(1, 2, figsize=(9, 4.6), sharey=True)
+for ax, fem, lab in [(axs[0], False, "Men"), (axs[1], True, "Women")]:
+    d = x[x.female == fem]; ul = lim["sp_mean"][fem]
+    ax.hexbin(d.fr_gl, d.sp_mean, gridsize=50, bins="log", cmap="Greys", mincnt=1, extent=(0, 180, 0, 180))
+    ax.axvline(90, color="#cc3333", ls=":", lw=1); ax.text(91, 4, "frontal 90°", color="#cc3333", fontsize=8)
+    ax.axhline(ul, color="#1f5fbf", ls="--", lw=1); ax.text(178, ul + 2, f"spatial upper limit {ul:.0f}°", color="#1f5fbf", fontsize=8, ha="right")
+    ax.plot([0, 180], [0, 180], color="#bbbbbb", lw=0.8)
+    ax.set_title(f"{lab} (n = {len(d):,})", fontsize=10); ax.set_xlabel("Frontal QRS-T angle, Uni-G axes (°)")
+    ax.set_xlim(0, 180); ax.set_ylim(0, 180)
+axs[0].set_ylabel("Spatial QRS-T angle, Kors mean vectors (°)")
 fig.tight_layout(); fig.savefig(f"{O}/fig1_frontal_vs_spatial.png", dpi=300); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(5.6, 3.6))

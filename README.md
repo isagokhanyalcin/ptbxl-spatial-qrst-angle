@@ -35,6 +35,7 @@ The first run of the analysis reads every median beat and writes the derived vec
 | `table_missed_predictors.csv` | Logistic regression for a missed spatial abnormality |
 | `table_roc.csv` | ROC analysis with DeLong comparison |
 | `table_sensitivity.csv` | Sensitivity analyses |
+| `table_sex_specific_vs_pooled.csv` | Missed abnormalities with sex-specific versus pooled spatial limits |
 | `fig1_frontal_vs_spatial.png`, `fig2_missed_by_zshare.png`, `fig3_roc.png` | Figures |
 | `key_results.json` | Patient flow and summary statistics |
 
