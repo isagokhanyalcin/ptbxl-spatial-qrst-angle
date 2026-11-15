@@ -19,6 +19,7 @@ bash scripts/00_download_tables.sh                                    # feature 
 python scripts/00_download_median_beats.py data/ptbxl_database.csv mb  # about 43,600 small files, about 240 MB
 python scripts/01_analysis_paper2.py data mb results
 python scripts/02_make_manuscript_tables.py results tables.md supplementary_tables.md  # manuscript tables
+python scripts/03_graphical_abstract.py results                                          # graphical abstract
 ```
 
 The first run of the analysis reads every median beat and writes the derived vectors to `results/spatial_vectors.csv`. Later runs reuse that file.
@@ -36,7 +37,7 @@ The first run of the analysis reads every median beat and writes the derived vec
 | `table_roc.csv` | ROC analysis with DeLong comparison |
 | `table_sensitivity.csv` | Sensitivity analyses |
 | `table_sex_specific_vs_pooled.csv` | Missed abnormalities with sex-specific versus pooled spatial limits |
-| `fig1_frontal_vs_spatial.png`, `fig2_missed_by_zshare.png`, `fig3_roc.png` | Figures |
+| `fig1_frontal_vs_spatial`, `fig2_missed_by_zshare`, `fig3_roc` (.png and vector .pdf) | Figures |
 | `key_results.json` | Patient flow and summary statistics |
 
 ## Authors

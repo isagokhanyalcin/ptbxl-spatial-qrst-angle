@@ -246,7 +246,7 @@ def t1(d):
 pd.DataFrame({"All": t1(x), "Healthy reference": t1(ref)}).to_csv(f"{O}/table_cohort.csv")
 
 # ---------------- figures ----------------
-plt.rcParams.update({"font.size": 9, "font.family": "DejaVu Sans"})
+plt.rcParams.update({"font.size": 9, "font.family": "DejaVu Sans", "pdf.fonttype": 42})
 fig, axs = plt.subplots(1, 2, figsize=(9, 4.6), sharey=True)
 for ax, fem, lab in [(axs[0], False, "Men"), (axs[1], True, "Women")]:
     d = x[x.female == fem]; ul = lim["sp_mean"][fem]
@@ -257,7 +257,7 @@ for ax, fem, lab in [(axs[0], False, "Men"), (axs[1], True, "Women")]:
     ax.set_title(f"{lab} (n = {len(d):,})", fontsize=10); ax.set_xlabel("Frontal QRS-T angle, Uni-G axes (°)")
     ax.set_xlim(0, 180); ax.set_ylim(0, 180)
 axs[0].set_ylabel("Spatial QRS-T angle, Kors mean vectors (°)")
-fig.tight_layout(); fig.savefig(f"{O}/fig1_frontal_vs_spatial.png", dpi=300); plt.close(fig)
+fig.tight_layout(); fig.savefig(f"{O}/fig1_frontal_vs_spatial.png", dpi=300); fig.savefig(f"{O}/fig1_frontal_vs_spatial.pdf"); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(5.6, 3.6))
 sub = T_miss[T_miss.by == "zt_tert"]
@@ -268,7 +268,7 @@ for k, (a, b) in enumerate(zip(sub.missed_pct_90, sub.missed_pct_ref)):
 ax.set_xticks(range(3)); ax.set_xticklabels([f"{l} tertile\n({r})" for l, r in zip(sub.level, sub.z_share_range)])
 ax.set_xlabel("Out-of-plane (Z) share of the mean T vector"); ax.set_ylabel("Spatially abnormal ECGs\nwith a normal frontal angle (%)")
 ax.set_ylim(0, 100); ax.legend(frameon=False, fontsize=8)
-fig.tight_layout(); fig.savefig(f"{O}/fig2_missed_by_zshare.png", dpi=300); plt.close(fig)
+fig.tight_layout(); fig.savefig(f"{O}/fig2_missed_by_zshare.png", dpi=300); fig.savefig(f"{O}/fig2_missed_by_zshare.pdf"); plt.close(fig)
 
 fig, axs = plt.subplots(1, 5, figsize=(14, 3.2), sharey=True)
 for axx, (name, c) in zip(axs, curves.items()):
@@ -279,7 +279,7 @@ for axx, (name, c) in zip(axs, curves.items()):
     axx.plot([0, 1], [0, 1], color="#cccccc", lw=0.8); axx.set_title(f"{name}\nAUC {r.auc_sp_mean:.3f} vs {r.auc_fr_gl:.3f}")
     axx.set_xlabel("1 − specificity")
 axs[0].set_ylabel("Sensitivity"); axs[0].legend(frameon=False, loc="lower right", fontsize=7)
-fig.tight_layout(); fig.savefig(f"{O}/fig3_roc.png", dpi=300); plt.close(fig)
+fig.tight_layout(); fig.savefig(f"{O}/fig3_roc.png", dpi=300); fig.savefig(f"{O}/fig3_roc.pdf"); plt.close(fig)
 
 def clean(o):
     if isinstance(o, dict): return {str(k): clean(v) for k, v in o.items()}
