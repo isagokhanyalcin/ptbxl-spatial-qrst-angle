@@ -1,0 +1,3 @@
+frontal_rule,spatial_abn,both_abn,spatial_only,frontal_only,both_normal,pct_spatial_abn_missed_by_frontal,kappa,pct_overall
+fr_abn_90,4838,3032,1806,391,13329,37.32947498966515,0.6607617199541813,26.06961957107447
+fr_abn_ref,4838,3554,1284,1023,12697,26.539892517569243,0.6717690210037652,26.06961957107447

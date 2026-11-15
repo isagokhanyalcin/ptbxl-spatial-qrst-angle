@@ -1,0 +1,48 @@
+{
+ "flow": {
+  "all_ecgs": 21799,
+  "median_beat_missing_leads": 30,
+  "with_median_beat_and_fiducials": 21763,
+  "with_all_angles": 21757,
+  "after_pacing_excluded": 21474,
+  "after_indeterminate_axis_excluded": 21373,
+  "primary_first_ecg_per_patient": 18558
+ },
+ "ref_n": 5470,
+ "upper_limits_sex": {
+  "sp_mean": {
+   "M": 106.2,
+   "F": 96.7
+  },
+  "sp_peak": {
+   "M": 100.7,
+   "F": 72.2
+  },
+  "fr_gl": {
+   "M": 69.0,
+   "F": 68.0
+  }
+ },
+ "spearman": {
+  "sp_mean_vs_fr_gl": 0.649,
+  "sp_mean_vs_fr_ge": 0.644,
+  "sp_mean_vs_fr_kors": 0.733,
+  "fr_kors_vs_fr_gl": 0.798,
+  "sp_peak_vs_glasgow_vm": 0.544,
+  "sp_mean_vs_sp_peak": 0.86
+ },
+ "missed_model_n": 4682,
+ "missed_model_events": 1266,
+ "baseline_agreement_median_absdiff": 1.8617,
+ "glasgow_vs_korspeak": {
+  "n": 18557,
+  "bias": 46.8745,
+  "loa": [
+   -42.4752,
+   136.2241
+  ],
+  "spearman": 0.5437,
+  "healthy_median_glasgow": 101.0,
+  "healthy_median_korspeak": 27.8415
+ }
+}
